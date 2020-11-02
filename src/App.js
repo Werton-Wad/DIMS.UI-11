@@ -1,7 +1,13 @@
 import React from 'react';
 
-const App = () => {
-  return <div className='App'>Hello!</div>;
-};
+import DimsApp from './components/DimsApp';
+
+function App() {
+  return (
+    <div className='App'>
+      <DimsApp />
+    </div>
+  );
+}
 
 export default App;

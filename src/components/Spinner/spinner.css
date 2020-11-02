@@ -1,0 +1,9 @@
+.spinner {
+  position: absolute;
+  top: 30%;
+  left: 40%;
+  display: block;
+  width: 200px;
+  height: 200px;
+  margin: auto;
+}

@@ -1,0 +1,37 @@
+.members {
+  margin-top: 20px;
+}
+table .table-members {
+  text-align: center;
+  align-items: center;
+  width: 100%;
+}
+.table-members td,
+.table-members th {
+  font-size: 20px;
+  border: 1px solid black;
+  background-color: #fff;
+  padding: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+.table-members td:last-child {
+  padding: 5px;
+}
+.table-members th {
+  text-align: center;
+  background-color: #17a2bb;
+  font-weight: bold;
+  color: black;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.task-message {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}

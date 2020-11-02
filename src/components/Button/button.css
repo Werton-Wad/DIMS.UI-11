@@ -1,0 +1,37 @@
+.btn {
+  cursor: pointer;
+  margin: 5px;
+  font-size: 15px;
+  width: 100px;
+  height: 50px;
+  background-color: #17a2bb;
+  border: 0;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #000;
+}
+
+.btn-warning,
+.btn-fail {
+  background-color: #c60000;
+}
+
+.btn:hover {
+  background-color: #0132cb;
+  color: white;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  -o-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+.btn-warning:hover,
+.btn-fail:hover {
+  background-color: red;
+  color: white;
+}
+.btn-success {
+  background-color: #126a14;
+}
+.btn-success:hover {
+  background-color: #244d20;
+}
