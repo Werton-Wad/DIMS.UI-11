@@ -1,13 +1,8 @@
 import React from 'react';
 
 import Button from './Button';
-import MemberTasks from '../MemberTasks';
-import MemberProgress from '../MemberProgress';
-import './modal.css';
-
 const ModalWindow = (props) => {
-  let { toggleModal, tasks, component: Component } = props;
-  console.log(tasks);
+  const { toggleModal, tasks, component: Component } = props;
   return (
     <>
       <div className='modal-window-overlay'></div>

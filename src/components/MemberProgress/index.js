@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { convertDate } from '../utilis';
 const MemberProgress = ({ currentMember: member }) => {
@@ -31,4 +32,20 @@ const MemberProgress = ({ currentMember: member }) => {
     </div>
   );
 };
+
+MemberProgress.propTypes = {
+  currentMember: PropTypes.exact({
+    tasks: PropTypes.array,
+    id: PropTypes.number,
+    age: PropTypes.number,
+    direction: PropTypes.string,
+    education: PropTypes.string,
+    email: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    startDate: PropTypes.number,
+    progress: PropTypes.array,
+  }),
+};
+
 export default MemberProgress;

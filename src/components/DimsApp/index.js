@@ -2,7 +2,6 @@ import React from 'react';
 
 import { createData } from '../utilis';
 import { db } from '../../firebase';
-import './dims-app.css';
 import Members from '../Members';
 import Header from '../Header';
 import Button from '../Button';
@@ -11,7 +10,7 @@ import ModalWindow from '../ModalWindow';
 import MemberTasks from '../MemberTasks';
 import MemberProgress from '../MemberProgress';
 
-class DimsApp extends React.Component {
+class DimsApp extends React.PureComponent {
   state = {
     members: [],
     currentMember: {},
@@ -19,19 +18,19 @@ class DimsApp extends React.Component {
     component: '',
   };
   async componentDidMount() {
-    const membersDB = await db.getMembers();
-    if (membersDB.length) {
-      this.setState({ members: membersDB });
+    const members = await db.getMembers();
+    if (members.length) {
+      this.setState({ members });
     } else {
       const members = createData(10);
       Promise.all(members.map((member) => db.addMemberToDb(member)));
       this.setState({ members });
     }
   }
-  handleMemberTasks = (member) => {
+  handleMemberTasks = (member) => () => {
     this.setState({ component: MemberTasks, currentMember: member, isModal: !this.state.isModal });
   };
-  handleMemberProgress = (member) => {
+  handleMemberProgress = (member) => () => {
     this.setState({ currentMember: member, component: MemberProgress, isModal: !this.state.isModal });
   };
   toggleModal = () => {

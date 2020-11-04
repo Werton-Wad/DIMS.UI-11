@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import Button from '../Button';
 import { convertDate } from '../utilis';
@@ -22,7 +23,7 @@ const MemberTasks = ({ currentMember: member }) => {
         <tbody>
           {member.tasks.map((task) => {
             return (
-              <tr key={id}>
+              <tr key={task.id}>
                 <td>{id++}</td>
                 <td>{task.name}</td>
                 <td>{convertDate(task.startDate)}</td>
@@ -33,8 +34,8 @@ const MemberTasks = ({ currentMember: member }) => {
                 </td>
                 <td>
                   <div className='buttons'>
-                    <Button buttonClass='btn btn-success' buttonName='Success' />
-                    <Button buttonClass='btn btn-fail' buttonName='Fail' />
+                    <Button buttonClass='btn-success' buttonName='Success' />
+                    <Button buttonClass='btn-fail' buttonName='Fail' />
                   </div>
                 </td>
               </tr>
@@ -44,6 +45,21 @@ const MemberTasks = ({ currentMember: member }) => {
       </table>
     </div>
   );
+};
+
+MemberTasks.propTypes = {
+  member: PropTypes.exact({
+    tasks: PropTypes.array,
+    id: PropTypes.number,
+    age: PropTypes.number,
+    direction: PropTypes.string,
+    education: PropTypes.string,
+    email: PropTypes.string,
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+    startDate: PropTypes.number,
+    progress: PropTypes.object,
+  }),
 };
 
 export default MemberTasks;

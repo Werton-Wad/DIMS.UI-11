@@ -1,11 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Button = (props) => {
+const Button = ({ toggleModal }) => {
   return (
-    <div onClick={props.toggleModal}>
+    <div onClick={toggleModal}>
       <img className='close-btn' src='./assets/close-icon.svg' />
     </div>
   );
+};
+
+Button.propTypes = {
+  toggleModal: PropTypes.func,
 };
 
 export default Button;

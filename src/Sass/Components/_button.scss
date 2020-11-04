@@ -1,0 +1,12 @@
+@import '../mixins';
+
+.btn {
+  @include button(#17a2bb, #0132cb);
+}
+.btn-fail,
+.btn-warning {
+  @include button(#c60000, red);
+}
+.btn-success {
+  @include button(#126a14, #244d20);
+}

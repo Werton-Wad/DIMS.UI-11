@@ -1,6 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import './members.css';
 import Button from '../Button';
 import { convertDate } from '../utilis';
 
@@ -33,12 +33,12 @@ const Members = (props) => {
                 <td>{member.age}</td>
                 <td>
                   <div className='buttons'>
-                    <Button buttonClass='btn' buttonName='Progress' handleClick={() => handleMemberProgress(member)} />
-                    <Button buttonClass='btn' buttonName='Tasks' handleClick={() => handleMemberTasks(member)} />
+                    <Button buttonClass='btn' buttonName='Progress' handleClick={handleMemberProgress(member)} />
+                    <Button buttonClass='btn' buttonName='Tasks' handleClick={handleMemberTasks(member)} />
                   </div>
                   <div className='buttons'>
                     <Button buttonClass='btn' buttonName='Edit' />
-                    <Button buttonClass='btn btn-warning' buttonName='Delete' />
+                    <Button buttonClass='btn-warning' buttonName='Delete' />
                   </div>
                 </td>
               </tr>
@@ -48,6 +48,12 @@ const Members = (props) => {
       </table>
     </section>
   );
+};
+
+Members.propTypes = {
+  members: PropTypes.array,
+  handleMemberTasks: PropTypes.func,
+  handleMemberProgress: PropTypes.func,
 };
 
 export default Members;

@@ -1,0 +1,21 @@
+@mixin button($bg-color, $bg-color-hover) {
+  cursor: pointer;
+  margin: 5px;
+  font-size: 15px;
+  width: 100px;
+  height: 50px;
+  background-color: $bg-color;
+  border: 0;
+  border-radius: 5px;
+  font-weight: bold;
+  color: #000;
+
+  &:hover {
+    background-color: $bg-color-hover;
+    color: white;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    -o-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+  }
+}

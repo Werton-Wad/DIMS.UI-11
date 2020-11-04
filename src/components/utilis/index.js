@@ -1,7 +1,10 @@
 import faker from 'faker';
 
 let id = 0;
-function convertDate(date) {
+export function convertDate(date) {
+  if (typeof date !== 'number') {
+    return null;
+  }
   const newDate = new Date(date);
   let day = newDate.getDate();
   let month = newDate.getMonth() + 1;
@@ -10,7 +13,7 @@ function convertDate(date) {
   month = month < 10 ? `0${month}` : month;
   return `${day}.${month}.${year}`;
 }
-function generateTask() {
+export function generateTask() {
   return {
     name: faker.random.arrayElement([
       'Create the DB',
@@ -24,16 +27,22 @@ function generateTask() {
     status: faker.random.arrayElement(['Active', 'Success', 'Fail']),
   };
 }
-function createRandomTasks(n) {
-  let random = Math.random() * n + 1;
-  return Array.from({ length: random }, generateTask);
+export function createRandomTasks(n) {
+  if (!isNaN(n)) {
+    let random = Math.random() * n + 1;
+    return Array.from({ length: random }, generateTask);
+  }
+  return null;
 }
 
-function createData(n) {
-  return Array.from({ length: n }, generateUser);
+export function createData(n) {
+  if (!isNaN(n)) {
+    return Array.from({ length: n }, generateUser);
+  }
+  return null;
 }
 
-function generateUser() {
+export function generateUser() {
   const randomTasks = createRandomTasks(5);
   return {
     id: id++,
@@ -60,4 +69,3 @@ function generateUser() {
     })),
   };
 }
-export { createData, convertDate };

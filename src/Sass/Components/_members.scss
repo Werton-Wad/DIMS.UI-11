@@ -1,0 +1,31 @@
+.members {
+  margin-top: 20px;
+}
+.table-members {
+  text-align: center;
+  align-items: center;
+  width: 100%;
+  td,
+  th {
+    font-size: 20px;
+    border: 1px solid black;
+    background-color: #fff;
+    padding: 20px;
+    text-align: center;
+    vertical-align: middle;
+  }
+  th {
+    text-align: center;
+    background-color: #17a2bb;
+    font-weight: bold;
+    color: black;
+  }
+  td:last-child {
+    padding: 5px;
+  }
+  .buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}

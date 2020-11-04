@@ -18,14 +18,15 @@
   transform: translate(-50%, -50%);
   display: block;
   background-color: #fff;
-}
-.modal-window__wrapper {
-  display: flex;
-  width: auto;
-  padding: 3%;
-}
-.close-btn {
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
+
+  .modal-window__wrapper {
+    display: flex;
+    width: auto;
+    padding: 3%;
+  }
+  .close-btn {
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+  }
 }
