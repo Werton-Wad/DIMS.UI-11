@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Button from '../Button';
 import { convertDate } from '../utilis';
 const MemberTasks = ({ member }) => {
-  let id = 1;
   return (
     <div>
       <div className='task-message'>Hi, dear {member.firstName}! This is your current tasks:</div>
@@ -21,10 +20,10 @@ const MemberTasks = ({ member }) => {
           </tr>
         </thead>
         <tbody>
-          {member.tasks.map((task) => {
+          {member.tasks.map((task, i) => {
             return (
               <tr key={task.id}>
-                <td>{id++}</td>
+                <td>{++i}</td>
                 <td>{task.name}</td>
                 <td>{convertDate(task.startDate)}</td>
                 <td>{convertDate(task.dedlineDate)}</td>

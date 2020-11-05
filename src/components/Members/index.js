@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 
 import Button from '../Button';
 import { convertDate } from '../utilis';
+import { getFullName } from '../helpers';
 import MemberProgress from '../MemberProgress';
 import MemberTasks from '../MemberTasks';
 
 const Members = ({ members, handleMember }) => {
-  let id = 1;
   return (
     <section className='members'>
       <table className='table-members'>
@@ -23,11 +23,11 @@ const Members = ({ members, handleMember }) => {
           </tr>
         </thead>
         <tbody>
-          {members.map((member) => {
+          {members.map((member, i) => {
             return (
-              <tr key={id}>
-                <td>{id++}</td>
-                <td>{member.firstName + ' ' + member.lastName}</td>
+              <tr key={member.id}>
+                <td>{++i}</td>
+                <td>{getFullName(member.firstName, member.lastName)}</td>
                 <td>{member.direction}</td>
                 <td>{member.education}</td>
                 <td>{convertDate(member.startDate)} </td>

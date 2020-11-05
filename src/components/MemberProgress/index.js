@@ -5,7 +5,6 @@ import { getFullName } from '../helpers';
 import { convertDate } from '../utilis';
 
 const MemberProgress = ({ member }) => {
-  let id = 1;
   return (
     <div>
       <div className='task-message'>{getFullName(member.firstName, member.lastName)} progress:</div>
@@ -19,10 +18,10 @@ const MemberProgress = ({ member }) => {
           </tr>
         </thead>
         <tbody>
-          {member.progress.map((item) => {
+          {member.progress.map((item, i) => {
             return (
-              <tr key={id}>
-                <td>{id++}</td>
+              <tr key={item.id}>
+                <td>{++i}</td>
                 <td>{item.task}</td>
                 <td>{item.note}</td>
                 <td>{convertDate(item.date)}</td>
