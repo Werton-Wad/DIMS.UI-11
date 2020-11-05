@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { getFullName } from '../helpers';
 import { convertDate } from '../utilis';
-const MemberProgress = ({ currentMember: member }) => {
+
+const MemberProgress = ({ member }) => {
   let id = 1;
   return (
     <div>
-      <div className='task-message'>{member.firstName + ' ' + member.lastName} progress:</div>
+      <div className='task-message'>{getFullName(member.firstName, member.lastName)} progress:</div>
       <table className='table-members'>
         <thead>
           <tr>
@@ -34,9 +36,9 @@ const MemberProgress = ({ currentMember: member }) => {
 };
 
 MemberProgress.propTypes = {
-  currentMember: PropTypes.exact({
+  member: PropTypes.exact({
     tasks: PropTypes.array,
-    id: PropTypes.number,
+    id: PropTypes.string,
     age: PropTypes.number,
     direction: PropTypes.string,
     education: PropTypes.string,

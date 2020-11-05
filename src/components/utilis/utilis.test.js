@@ -5,6 +5,7 @@ describe('testing function generateTask', () => {
     const result = generateTask();
     expect(result).toEqual(
       expect.objectContaining({
+        id: expect.any(Number),
         name: expect.any(String),
         startDate: expect.any(Number),
         dedlineDate: expect.any(Number),

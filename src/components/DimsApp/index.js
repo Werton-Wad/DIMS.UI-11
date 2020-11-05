@@ -1,14 +1,11 @@
 import React from 'react';
 
-import { createData } from '../utilis';
 import { db } from '../../firebase';
 import Members from '../Members';
 import Header from '../Header';
 import Button from '../Button';
 import Spinner from '../Spinner';
 import ModalWindow from '../ModalWindow';
-import MemberTasks from '../MemberTasks';
-import MemberProgress from '../MemberProgress';
 
 class DimsApp extends React.PureComponent {
   state = {
@@ -18,38 +15,35 @@ class DimsApp extends React.PureComponent {
     component: '',
   };
   async componentDidMount() {
-    const members = await db.getMembers();
-    if (members.length) {
+    try {
+      const members = await db.getMembers();
       this.setState({ members });
-    } else {
-      const members = createData(10);
-      Promise.all(members.map((member) => db.addMemberToDb(member)));
-      this.setState({ members });
+    } catch (e) {
+      throw e;
     }
   }
-  handleMemberTasks = (member) => () => {
-    this.setState({ component: MemberTasks, currentMember: member, isModal: !this.state.isModal });
-  };
-  handleMemberProgress = (member) => () => {
-    this.setState({ currentMember: member, component: MemberProgress, isModal: !this.state.isModal });
+  handleMember = (member, component) => () => {
+    this.setState((prevState) => {
+      return {
+        component,
+        currentMember: member,
+        isModal: !prevState.isModal,
+      };
+    });
   };
   toggleModal = () => {
     this.setState({ isModal: !this.state.isModal });
   };
   render() {
-    const { isModal, members } = this.state;
+    const { isModal, members, currentMember, component } = this.state;
     return (
       <div>
-        {isModal && <ModalWindow toggleModal={this.toggleModal} {...this.state} />}
+        {isModal && <ModalWindow toggleModal={this.toggleModal} member={currentMember} Component={component} />}
         <Header />
         {members.length ? (
           <div className='container'>
             <Button buttonName='Register' buttonClass='btn' />
-            <Members
-              members={members}
-              handleMemberTasks={this.handleMemberTasks}
-              handleMemberProgress={this.handleMemberProgress}
-            />
+            <Members members={members} handleMember={this.handleMember} />
           </div>
         ) : (
           <Spinner />

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Button from '../Button';
 import { convertDate } from '../utilis';
-const MemberTasks = ({ currentMember: member }) => {
+const MemberTasks = ({ member }) => {
   let id = 1;
   return (
     <div>
@@ -50,7 +50,7 @@ const MemberTasks = ({ currentMember: member }) => {
 MemberTasks.propTypes = {
   member: PropTypes.exact({
     tasks: PropTypes.array,
-    id: PropTypes.number,
+    id: PropTypes.string,
     age: PropTypes.number,
     direction: PropTypes.string,
     education: PropTypes.string,
@@ -58,7 +58,7 @@ MemberTasks.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     startDate: PropTypes.number,
-    progress: PropTypes.object,
+    progress: PropTypes.array,
   }),
 };
 

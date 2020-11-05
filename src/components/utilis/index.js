@@ -1,6 +1,5 @@
 import faker from 'faker';
 
-let id = 0;
 export function convertDate(date) {
   if (typeof date !== 'number') {
     return null;
@@ -15,6 +14,7 @@ export function convertDate(date) {
 }
 export function generateTask() {
   return {
+    id: faker.random.uuid(),
     name: faker.random.arrayElement([
       'Create the DB',
       'Write uinit tests',
@@ -45,7 +45,7 @@ export function createData(n) {
 export function generateUser() {
   const randomTasks = createRandomTasks(5);
   return {
-    id: id++,
+    id: faker.random.uuid(),
     firstName: faker.name.firstName(),
     lastName: faker.name.lastName(),
     email: faker.internet.email(),

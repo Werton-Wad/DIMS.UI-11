@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 
 import Button from '../Button';
 import { convertDate } from '../utilis';
+import MemberProgress from '../MemberProgress';
+import MemberTasks from '../MemberTasks';
 
-const Members = (props) => {
-  const { members, handleMemberTasks, handleMemberProgress } = props;
+const Members = ({ members, handleMember }) => {
   let id = 1;
   return (
     <section className='members'>
@@ -33,8 +34,12 @@ const Members = (props) => {
                 <td>{member.age}</td>
                 <td>
                   <div className='buttons'>
-                    <Button buttonClass='btn' buttonName='Progress' handleClick={handleMemberProgress(member)} />
-                    <Button buttonClass='btn' buttonName='Tasks' handleClick={handleMemberTasks(member)} />
+                    <Button
+                      buttonClass='btn'
+                      buttonName='Progress'
+                      handleClick={handleMember(member, MemberProgress)}
+                    />
+                    <Button buttonClass='btn' buttonName='Tasks' handleClick={handleMember(member, MemberTasks)} />
                   </div>
                   <div className='buttons'>
                     <Button buttonClass='btn' buttonName='Edit' />
@@ -52,8 +57,7 @@ const Members = (props) => {
 
 Members.propTypes = {
   members: PropTypes.array,
-  handleMemberTasks: PropTypes.func,
-  handleMemberProgress: PropTypes.func,
+  handleMember: PropTypes.func,
 };
 
 export default Members;
