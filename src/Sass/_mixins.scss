@@ -1,9 +1,9 @@
 @mixin button($bg-color, $bg-color-hover) {
   cursor: pointer;
-  margin: 5px;
   font-size: 15px;
-  width: 100px;
-  height: 50px;
+  margin: 0.35rem;
+  width: 6.5rem;
+  height: 3.2rem;
   background-color: $bg-color;
   border: 0;
   border-radius: 5px;
