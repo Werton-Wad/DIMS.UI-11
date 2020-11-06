@@ -56,8 +56,8 @@ const Members = ({ members, handleMember }) => {
 };
 
 Members.propTypes = {
-  members: PropTypes.array,
-  handleMember: PropTypes.func,
+  members: PropTypes.array.isRequired,
+  handleMember: PropTypes.func.isRequired,
 };
 
 export default Members;

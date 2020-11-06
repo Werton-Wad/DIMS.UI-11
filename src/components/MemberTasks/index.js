@@ -48,15 +48,15 @@ const MemberTasks = ({ member }) => {
 
 MemberTasks.propTypes = {
   member: PropTypes.exact({
-    tasks: PropTypes.array,
-    id: PropTypes.string,
-    age: PropTypes.number,
-    direction: PropTypes.string,
-    education: PropTypes.string,
-    email: PropTypes.string,
-    firstName: PropTypes.string,
-    lastName: PropTypes.string,
-    startDate: PropTypes.number,
+    tasks: PropTypes.array.isRequired,
+    id: PropTypes.string.isRequired,
+    age: PropTypes.number.isRequired,
+    direction: PropTypes.string.isRequired,
+    education: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    firstName: PropTypes.string.isRequired,
+    lastName: PropTypes.string.isRequired,
+    startDate: PropTypes.number.isRequired,
     progress: PropTypes.array,
   }),
 };
