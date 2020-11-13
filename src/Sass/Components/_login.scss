@@ -1,0 +1,83 @@
+.login-wrapper {
+  width: 100vw;
+  height: 100vh;
+  background-color: #46aca3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .login-page {
+    margin: auto;
+    .login-page__title {
+      font-size: 40px;
+      text-align: center;
+      padding: 0.5rem;
+      color: #fff;
+      text-transform: uppercase;
+      border-bottom: 1px solid #fff;
+    }
+    form {
+      display: flex;
+      justify-content: space-between;
+      input,
+      button {
+        display: block;
+        flex-basis: 100%;
+        margin: 0 1rem;
+        margin-bottom: 3rem;
+        border-radius: 1.5rem;
+        border: 0;
+        border-bottom: 1px solid #b4babe;
+        outline: 0;
+        color: #000;
+        font-weight: bold;
+        background: #fff;
+        padding: 1rem 0.5rem;
+        &::placeholder {
+          color: #d1d1d1;
+        }
+      }
+      button {
+        text-transform: uppercase;
+        cursor: pointer;
+        &:hover {
+          background-color: #19646a;
+          color: #fff;
+          -webkit-transition: all 0.3s ease;
+          -moz-transition: all 0.3s ease;
+          -o-transition: all 0.3s ease;
+          transition: all 0.3s ease;
+        }
+      }
+    }
+    .buttons-container {
+      padding-top: 1.5rem;
+      border-top: 1px solid #fff;
+      display: flex;
+      justify-content: space-between;
+      button {
+        width: 50%;
+        cursor: pointer;
+        color: #03aea6;
+        text-transform: uppercase;
+        margin: 0 1rem;
+        margin-bottom: 3rem;
+        border-radius: 1.5rem;
+        border: 0;
+        border-bottom: 1px solid #b4babe;
+        outline: 0;
+        color: #000;
+        font-weight: bold;
+        background: #fff;
+        padding: 1rem 0.5rem;
+        &:hover {
+          background-color: #19646a;
+          color: #fff;
+          -webkit-transition: all 0.3s ease;
+          -moz-transition: all 0.3s ease;
+          -o-transition: all 0.3s ease;
+          transition: all 0.3s ease;
+        }
+      }
+    }
+  }
+}

@@ -8,7 +8,8 @@ describe('testing function generateTask', () => {
         id: expect.any(Number),
         name: expect.any(String),
         startDate: expect.any(Number),
-        dedlineDate: expect.any(Number),
+        deadlineDate: expect.any(Number),
+        description: expect.any(String),
         status: expect.any(String),
       }),
     );

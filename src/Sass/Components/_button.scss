@@ -10,3 +10,16 @@
 .btn-success {
   @include button(#126a14, #244d20);
 }
+.btn-form-save {
+  @include form-button(#000, #009900, #fff, #009900);
+  margin-right: 3rem;
+}
+.btn-register,
+.btn-create,
+.btn-add-track,
+.btn-back {
+  margin-bottom: 1.5rem;
+}
+.btn-form-back {
+  @include form-button(#000, #fff, #fff, #000);
+}

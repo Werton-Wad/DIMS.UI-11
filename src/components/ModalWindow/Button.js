@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import svg from './close-icon.svg';
 const Button = ({ toggleModal }) => {
   return (
     <div onClick={toggleModal}>
-      <img className='close-btn' src='./assets/close-icon.svg' alt='close-button' />
+      <img className='close-btn' src={svg} alt='close-button' />
     </div>
   );
 };

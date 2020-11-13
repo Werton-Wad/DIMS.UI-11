@@ -1,6 +1,7 @@
 import firebase from 'firebase';
 
 import { createData } from './components/utilis';
+import auth from './components/Auth/auth';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -12,28 +13,51 @@ const firebaseConfig = {
   appId: process.env.REACT_APP_FIREBASE_APPID,
 };
 
-function firestoreCollectionMembers() {
-  return firebase.firestore().collection('members');
+const signInConfig = {
+  signInFlow: 'popup',
+  signInService: {
+    google: new firebase.auth.GoogleAuthProvider(),
+    facebook: new firebase.auth.FacebookAuthProvider(),
+    github: new firebase.auth.GithubAuthProvider(),
+  },
+};
+
+function firestoreCollection(collection) {
+  return firebase.firestore().collection(collection);
 }
 
-async function addMemberToDb(member) {
+async function addMemberToCollection(member, collection) {
   try {
-    await firestoreCollectionMembers().add(member);
+    await firestoreCollection(collection).add(member);
   } catch (e) {
     throw e;
   }
 }
-
-async function getMembers() {
+async function initAppFirebase() {
   try {
     await firebase.initializeApp(firebaseConfig);
-    const membersDB = await firestoreCollectionMembers().get();
+  } catch (e) {
+    throw e;
+  }
+}
+async function getMembers() {
+  try {
+    const membersDB = await firestoreCollection('members').get();
     let members = membersDB.docs.map((doc) => doc.data());
     if (members.length) {
       return members;
     } else {
       members = createData(10);
-      members.map(async (member) => await addMemberToDb(member));
+      members.map(async (member) => {
+        const { tasks, progress, ...other } = member;
+        await addMemberToCollection(other, 'members');
+        progress.map(async (item) => {
+          await addMemberToCollection(item, 'progress');
+        });
+        tasks.map(async (task) => {
+          await addMemberToCollection(task, 'tasks');
+        });
+      });
       return members;
     }
   } catch (e) {
@@ -41,8 +65,105 @@ async function getMembers() {
   }
 }
 
+async function getMember(memberId) {
+  try {
+    const result = await firestoreCollection('members')
+      .where('id', '==', memberId)
+      .get();
+    return result.docs.map((doc) => doc.data())[0];
+  } catch (e) {
+    throw e;
+  }
+}
+async function getMemberTasks(memberId) {
+  try {
+    const result = await firestoreCollection('tasks')
+      .where('userId', '==', memberId)
+      .get();
+    const tasks = result.docs.map((doc) => doc.data());
+    return tasks;
+  } catch (e) {
+    throw e;
+  }
+}
+async function getTaskById(taskId) {
+  try {
+    const result = await firestoreCollection('tasks')
+      .where('id', '==', taskId)
+      .get();
+    const task = result.docs.map((doc) => doc.data())[0];
+    return task;
+  } catch (e) {
+    throw e;
+  }
+}
+async function getAllTasks() {
+  try {
+    const result = await firestoreCollection('tasks').get();
+    return result.docs.map((doc) => doc.data());
+  } catch (e) {
+    throw e;
+  }
+}
+async function getMemberProgress(memberId) {
+  try {
+    const result = await firestoreCollection('progress')
+      .where('userId', '==', memberId)
+      .get();
+    return result.docs.map((doc) => doc.data());
+  } catch (e) {
+    throw e;
+  }
+}
+async function getTaskTracks(taskId) {
+  try {
+    const result = await firestoreCollection('progress')
+      .where('taskId', '==', taskId)
+      .get();
+    return result.docs.map((doc) => doc.data());
+  } catch (e) {
+    throw e;
+  }
+}
+async function signInWithGoogle() {
+  const authFirebase = firebase.auth();
+  const googleProvider = new firebase.auth.GoogleAuthProvider();
+  const result = await authFirebase.signInWithPopup(googleProvider);
+  console.log(result.user.email);
+  auth.setAuthInformation(result.user.email);
+}
+async function signInWithFacebook() {
+  const auth = firebase.auth();
+  const facebookProvider = new firebase.auth.FacebookAuthProvider();
+  auth
+    .signInWithPopup(facebookProvider)
+    .then((res) => {
+      console.log(res.user.email);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+}
+async function signInWithGithub() {
+  const auth = firebase.auth();
+  const githubProvider = new firebase.auth.GithubAuthProvider();
+  auth
+    .signInWithPopup(githubProvider)
+    .then((res) => {
+      console.log(res.user.email);
+    })
+    .catch((error) => {
+      console.log(error.message);
+    });
+}
+
 export const db = {
-  addMemberToDb: addMemberToDb,
+  initAppFirebase: initAppFirebase,
   getMembers: getMembers,
-  firebaseConfig: firebaseConfig,
+  getMemberTasks: getMemberTasks,
+  getMemberProgress: getMemberProgress,
+  getMember: getMember,
+  getAllTasks: getAllTasks,
+  getTaskById: getTaskById,
+  getTaskTracks: getTaskTracks,
 };

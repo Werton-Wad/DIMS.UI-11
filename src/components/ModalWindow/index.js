@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 
 import Button from './Button';
 
-const ModalWindow = ({ toggleModal, Component, member }) => {
+const ModalWindow = (props) => {
+  console.log(props);
+  const { Component, ...rest } = props;
   return (
     <>
       <div className='modal-window-overlay'></div>
       <div className='modal-window'>
         <div className='modal-window__wrapper'>
-          <Component member={member} />
-          <Button toggleModal={toggleModal} />
+          <Component {...rest} />
+          <Button toggleModal={props.toggleModal} />
         </div>
       </div>
     </>
@@ -20,18 +22,10 @@ const ModalWindow = ({ toggleModal, Component, member }) => {
 ModalWindow.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   Component: PropTypes.elementType.isRequired,
-  member: PropTypes.exact({
-    tasks: PropTypes.array,
-    id: PropTypes.string.isRequired,
-    age: PropTypes.number.isRequired,
-    direction: PropTypes.string.isRequired,
-    education: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    firstName: PropTypes.string.isRequired,
-    lastName: PropTypes.string.isRequired,
-    startDate: PropTypes.number.isRequired,
-    progress: PropTypes.array,
-  }),
+  member: PropTypes.object,
+  typeForm: PropTypes.string.isRequired,
+  task: PropTypes.object,
+  track: PropTypes.object,
 };
 
 export default ModalWindow;

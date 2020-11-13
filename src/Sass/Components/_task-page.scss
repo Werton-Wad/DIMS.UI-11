@@ -1,0 +1,7 @@
+@import '../mixins';
+
+.task-page {
+  @include modal-form('task');
+  padding: 1rem;
+  width: 20rem;
+}

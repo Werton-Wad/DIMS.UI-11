@@ -1,0 +1,7 @@
+@import '../mixins';
+
+.track-page {
+  @include modal-form('track');
+  padding: 1rem;
+  width: 20rem;
+}
