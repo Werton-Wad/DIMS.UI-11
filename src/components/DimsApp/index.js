@@ -9,12 +9,12 @@ import Button from '../Button';
 import Spinner from '../Spinner';
 import ModalWindow from '../ModalWindow';
 import Login from '../Login';
-import auth from '../Auth/auth';
 import PrivateRoute from '../PrivateRoute';
 import MemberProgress from '../MemberProgress';
 import TrackPage from '../TrackPage';
 import TasksManage from '../TasksManage';
 import TaskTracksManage from '../TaskTracksManage';
+import { AuthProvider, AuthContext } from '../Auth/AuthProvider';
 class DimsApp extends React.PureComponent {
   state = {
     members: [],
@@ -28,7 +28,6 @@ class DimsApp extends React.PureComponent {
   };
   async componentDidMount() {
     try {
-      await db.initAppFirebase();
       const members = await db.getMembers();
       this.setState({ members });
     } catch (e) {
@@ -76,49 +75,48 @@ class DimsApp extends React.PureComponent {
     const { isModal, members, currentMember, component, typeForm, currentTask, currentTrack } = this.state;
     return (
       <div>
-        <Header />
-        {isModal && (
-          <ModalWindow
-            toggleModal={this.toggleModal}
-            member={currentMember}
-            Component={component}
-            typeForm={typeForm}
-            task={currentTask}
-            track={currentTrack}
-          />
-        )}
-        {members.length ? (
-          <div className='container'>
-            <Switch>
-              <Route path='/login' component={Login} />
-              <Route
-                path='/members'
-                exact
-                render={() => (
-                  <Members
-                    members={members}
-                    handleMember={this.handleMember}
-                    handleRegisterPage={this.handleRegisterPage}
-                  />
-                )}
-              />
-              <Route
-                path='/members/:id/progress'
-                exact
-                render={(props) => <MemberProgress {...props} handleTaskPage={this.handleTaskPage} />}
-              />
-              <Route path='/members/:id/tasks' exact render={(props) => <MemberTasks {...props} />} />
-              <Route
-                path='/members/:id/tasks/:taskId/tracks'
-                exact
-                render={(props) => <TaskTracksManage {...props} handleTrackPage={this.handleTrackPage} />}
-              />
-              <Route path='/tasks' render={() => <TasksManage handleTaskPage={this.handleTaskPage} />} />
-            </Switch>
-          </div>
-        ) : (
-          <Spinner />
-        )}
+        <AuthProvider>
+          <PrivateRoute component={Header} />
+          {isModal && (
+            <ModalWindow
+              toggleModal={this.toggleModal}
+              member={currentMember}
+              Component={component}
+              typeForm={typeForm}
+              task={currentTask}
+              track={currentTrack}
+            />
+          )}
+          {members.length ? (
+            <div className='container'>
+              <Switch>
+                <Route path='/login' component={Login} />
+                <PrivateRoute
+                  path='/members'
+                  exact
+                  component={Members}
+                  members={members}
+                  handleMember={this.handleMember}
+                  handleRegisterPage={this.handleRegisterPage}
+                />
+                <Route
+                  path='/members/:id/progress'
+                  exact
+                  render={(props) => <MemberProgress {...props} handleTaskPage={this.handleTaskPage} />}
+                />
+                <Route path='/members/:id/tasks' exact render={(props) => <MemberTasks {...props} />} />
+                <Route
+                  path='/members/:id/tasks/:taskId/tracks'
+                  exact
+                  render={(props) => <TaskTracksManage {...props} handleTrackPage={this.handleTrackPage} />}
+                />
+                <Route path='/tasks' render={() => <TasksManage handleTaskPage={this.handleTaskPage} />} />
+              </Switch>
+            </div>
+          ) : (
+            <Spinner />
+          )}
+        </AuthProvider>
       </div>
     );
   }

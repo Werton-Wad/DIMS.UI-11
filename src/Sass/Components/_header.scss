@@ -1,10 +1,13 @@
 header {
+  .header__content {
+    display: flex;
+    justify-content: space-between;
+  }
   margin-bottom: 1.5rem;
   background-color: #46aca3;
   padding: 1.5rem 0;
 
   .header__title {
-    margin-left: 3rem;
     font-weight: bold;
     color: white;
     font-size: 2rem;

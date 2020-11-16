@@ -1,7 +1,6 @@
 import firebase from 'firebase';
 
 import { createData } from './components/utilis';
-import auth from './components/Auth/auth';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -11,15 +10,6 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGEBUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_SENDERID,
   appId: process.env.REACT_APP_FIREBASE_APPID,
-};
-
-const signInConfig = {
-  signInFlow: 'popup',
-  signInService: {
-    google: new firebase.auth.GoogleAuthProvider(),
-    facebook: new firebase.auth.FacebookAuthProvider(),
-    github: new firebase.auth.GithubAuthProvider(),
-  },
 };
 
 function firestoreCollection(collection) {
@@ -33,9 +23,12 @@ async function addMemberToCollection(member, collection) {
     throw e;
   }
 }
-async function initAppFirebase() {
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+
+async function registerPasswordUser(email, password) {
   try {
-    await firebase.initializeApp(firebaseConfig);
+    const authFirebase = firebase.auth();
+    await authFirebase.createUserWithEmailAndPassword(email, password);
   } catch (e) {
     throw e;
   }
@@ -51,6 +44,8 @@ async function getMembers() {
       members.map(async (member) => {
         const { tasks, progress, ...other } = member;
         await addMemberToCollection(other, 'members');
+        console.log(other);
+        await registerPasswordUser(other.email, '12345678');
         progress.map(async (item) => {
           await addMemberToCollection(item, 'progress');
         });
@@ -125,40 +120,8 @@ async function getTaskTracks(taskId) {
     throw e;
   }
 }
-async function signInWithGoogle() {
-  const authFirebase = firebase.auth();
-  const googleProvider = new firebase.auth.GoogleAuthProvider();
-  const result = await authFirebase.signInWithPopup(googleProvider);
-  console.log(result.user.email);
-  auth.setAuthInformation(result.user.email);
-}
-async function signInWithFacebook() {
-  const auth = firebase.auth();
-  const facebookProvider = new firebase.auth.FacebookAuthProvider();
-  auth
-    .signInWithPopup(facebookProvider)
-    .then((res) => {
-      console.log(res.user.email);
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-}
-async function signInWithGithub() {
-  const auth = firebase.auth();
-  const githubProvider = new firebase.auth.GithubAuthProvider();
-  auth
-    .signInWithPopup(githubProvider)
-    .then((res) => {
-      console.log(res.user.email);
-    })
-    .catch((error) => {
-      console.log(error.message);
-    });
-}
 
 export const db = {
-  initAppFirebase: initAppFirebase,
   getMembers: getMembers,
   getMemberTasks: getMemberTasks,
   getMemberProgress: getMemberProgress,
@@ -166,4 +129,6 @@ export const db = {
   getAllTasks: getAllTasks,
   getTaskById: getTaskById,
   getTaskTracks: getTaskTracks,
+  firebaseApp: firebaseApp,
+  firebaseConfig: firebaseConfig,
 };
