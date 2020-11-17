@@ -30,6 +30,7 @@ class RegisterPage extends React.Component {
         direction,
         education,
         email,
+        sex,
         mathScore,
         birthDate,
         universityAverageScore,
@@ -45,6 +46,7 @@ class RegisterPage extends React.Component {
           direction,
           education,
           email,
+          sex,
           mathScore,
           birthDate: convertDate(startDate, true),
           universityAverageScore,
@@ -90,123 +92,144 @@ class RegisterPage extends React.Component {
             {helperRegisterPage[typeForm].title(typeForm !== 'create' ? getFullName(name, lastName) : null)}
           </h3>
           <form autoComplete='off'>
-            <label for='register-name'>Name</label>
-            <input
-              name='name'
-              id='register-name'
-              type='text'
-              value={name}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-last-name'>Last Name</label>
-            <input
-              name='lastName'
-              id='register-last-name'
-              type='text'
-              value={lastName}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-direction'>Direction</label>
-            <select id='register-direction' name='direction' required>
-              <option>java</option>
-              <option>.net</option>
-              <option>frontend</option>
-              <option>php</option>
-            </select>
-            <label for='register-email'>E-mail</label>
-            <input
-              name='email'
-              id='register-email'
-              type='text'
-              value={email}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-education'>Education</label>
-            <input
-              name='education'
-              id='register-education'
-              type='text'
-              value={education}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-birth-date'>Birth Date</label>
-            <input
-              name='birthDate'
-              id='register-birth-date'
-              type='date'
-              value={birthDate}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-university-score'>University average score</label>
-            <input
-              name='universityAverageScore'
-              id='register-university-score'
-              type='number'
-              value={universityAverageScore}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-math-score'>Math score</label>
-            <input
-              name='mathScore'
-              id='register-math-score'
-              type='number'
-              value={mathScore}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-address'>Address</label>
-            <input
-              name='address'
-              id='register-address'
-              type='text'
-              value={address}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-phone'>Mobile phone</label>
-            <input
-              name='mobilePhone'
-              id='register-phone'
-              type='text'
-              value={mobilePhone}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-skype'>Skype</label>
-            <input
-              name='skype'
-              id='register-skype'
-              type='text'
-              value={skype}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
-            <label for='register-start-date'>Start Date</label>
-            <input
-              name='startDate'
-              id='register-start-date'
-              type='date'
-              value={startDate}
-              onChange={this.handleChange}
-              disabled={typeForm === 'detail'}
-              required
-            />
+            <div className='form-elems'>
+              <div>
+                <label for='register-name'>Name</label>
+                <input
+                  name='name'
+                  id='register-name'
+                  type='text'
+                  value={name}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+                <label for='register-last-name'>Last Name</label>
+                <input
+                  name='lastName'
+                  id='register-last-name'
+                  type='text'
+                  value={lastName}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+                <label for='register-education'>Education</label>
+                <input
+                  name='education'
+                  id='register-education'
+                  type='text'
+                  value={education}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+                <label for='register-email'>E-mail</label>
+                <input
+                  name='email'
+                  id='register-email'
+                  type='text'
+                  value={email}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+              </div>
+              <div>
+                <label for='register-birth-date'>Birth Date</label>
+                <input
+                  name='birthDate'
+                  id='register-birth-date'
+                  type='date'
+                  value={birthDate}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+                <label for='register-direction'>Direction</label>
+                <select id='register-direction' name='direction' required disabled={typeForm === 'detail'}>
+                  <option selected={'java' === direction}>java</option>
+                  <option selected={'.net' === direction}>.net</option>
+                  <option selected={'frontend' === direction}>frontend</option>
+                  <option selected={'php' === direction}>php</option>
+                </select>
+                <label for='register-university-score'>University average score</label>
+                <input
+                  name='universityAverageScore'
+                  id='register-university-score'
+                  type='number'
+                  value={universityAverageScore}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+                <label for='register-math-score'>Math score</label>
+                <input
+                  name='mathScore'
+                  id='register-math-score'
+                  type='number'
+                  value={mathScore}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+              </div>
+              <div>
+                <label for='register-address'>Address</label>
+                <input
+                  name='address'
+                  id='register-address'
+                  type='text'
+                  value={address}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+                <label for='register-phone'>Mobile phone</label>
+                <input
+                  name='mobilePhone'
+                  id='register-phone'
+                  type='text'
+                  value={mobilePhone}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+                <label for='register-skype'>Skype</label>
+                <input
+                  name='skype'
+                  id='register-skype'
+                  type='text'
+                  value={skype}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+                <div className='radio-btn-sex'>
+                  <label>Sex</label>
+                  <label className='label-sex' for='male'>
+                    <span className='title-radio-input'>Male</span>
+                    <input type='radio' name='sex' id='male' checked={'male' === sex} />
+                  </label>
+                  <label className='label-sex' for='female'>
+                    <span className='title-radio-input'>Female</span>
+                    <input type='radio' name='sex' id='female' checked={'female' === sex} />
+                  </label>
+                </div>
+              </div>
+              <div>
+                <label for='register-start-date'>Start Date</label>
+                <input
+                  name='startDate'
+                  id='register-start-date'
+                  type='date'
+                  value={startDate}
+                  onChange={this.handleChange}
+                  disabled={typeForm === 'detail'}
+                  required
+                />
+              </div>
+            </div>
             {typeForm !== 'detail' && (
               <Button buttonName='Save' buttonClass='btn-form-save' handleClick={this.handleSubmit} />
             )}
