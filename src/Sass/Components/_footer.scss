@@ -1,0 +1,18 @@
+.footer {
+  position: absolute;
+  height: 75px;
+  background-color: #363636;
+  color: #fff;
+  width: 100%;
+  bottom: 0;
+  .footer__content {
+    .text {
+      position: absolute;
+      margin: 0;
+      padding: 0;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

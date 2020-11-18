@@ -5,6 +5,7 @@ import { db } from '../../firebase';
 import Members from '../Members';
 import MemberTasks from '../MemberTasks';
 import Header from '../Header';
+import Footer from '../Footer';
 import Button from '../Button';
 import Spinner from '../Spinner';
 import ModalWindow from '../ModalWindow';
@@ -74,7 +75,7 @@ class DimsApp extends React.PureComponent {
   render() {
     const { isModal, members, currentMember, component, typeForm, currentTask, currentTrack } = this.state;
     return (
-      <div>
+      <div className='wrapper'>
         <AuthProvider>
           <PrivateRoute component={Header} />
           {isModal && (
@@ -88,31 +89,34 @@ class DimsApp extends React.PureComponent {
             />
           )}
           {members.length ? (
-            <div className='container'>
-              <Switch>
-                <Route path='/login' component={Login} />
-                <PrivateRoute
-                  path='/members'
-                  exact
-                  component={Members}
-                  members={members}
-                  handleMember={this.handleMember}
-                  handleRegisterPage={this.handleRegisterPage}
-                />
-                <Route
-                  path='/members/:id/progress'
-                  exact
-                  render={(props) => <MemberProgress {...props} handleTaskPage={this.handleTaskPage} />}
-                />
-                <Route path='/members/:id/tasks' exact render={(props) => <MemberTasks {...props} />} />
-                <Route
-                  path='/members/:id/tasks/:taskId/tracks'
-                  exact
-                  render={(props) => <TaskTracksManage {...props} handleTrackPage={this.handleTrackPage} />}
-                />
-                <Route path='/tasks' render={() => <TasksManage handleTaskPage={this.handleTaskPage} />} />
-              </Switch>
-            </div>
+            <>
+              <div className='container'>
+                <Switch>
+                  <Route path='/login' component={Login} />
+                  <PrivateRoute
+                    path='/members'
+                    exact
+                    component={Members}
+                    members={members}
+                    handleMember={this.handleMember}
+                    handleRegisterPage={this.handleRegisterPage}
+                  />
+                  <Route
+                    path='/members/:id/progress'
+                    exact
+                    render={(props) => <MemberProgress {...props} handleTaskPage={this.handleTaskPage} />}
+                  />
+                  <Route path='/members/:id/tasks' exact render={(props) => <MemberTasks {...props} />} />
+                  <Route
+                    path='/members/:id/tasks/:taskId/tracks'
+                    exact
+                    render={(props) => <TaskTracksManage {...props} handleTrackPage={this.handleTrackPage} />}
+                  />
+                  <Route path='/tasks' render={() => <TasksManage handleTaskPage={this.handleTaskPage} />} />
+                </Switch>
+              </div>
+              <PrivateRoute component={Footer} />
+            </>
           ) : (
             <Spinner />
           )}

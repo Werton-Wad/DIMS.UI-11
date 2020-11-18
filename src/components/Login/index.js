@@ -30,8 +30,8 @@ class Login extends React.Component {
           <div className='text'>or</div>
           <div className='buttons-container'>
             <button onClick={() => this.props.signInWithGoogle()}>sign in with google</button>
-            <button onClick={() => this.props.signInWithFacebook()}>sigh in with facebook</button>
-            <button onClick={() => this.props.signInWithGithub()}>sigh in with github</button>
+            <button onClick={() => this.props.signInWithFacebook()}>sign in with facebook</button>
+            <button onClick={() => this.props.signInWithGithub()}>sign in with github</button>
           </div>
         </div>
       </div>
