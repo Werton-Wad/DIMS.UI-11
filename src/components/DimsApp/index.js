@@ -15,15 +15,14 @@ import MemberProgress from '../MemberProgress';
 import TrackPage from '../TrackPage';
 import TasksManage from '../TasksManage';
 import TaskTracksManage from '../TaskTracksManage';
+
 class DimsApp extends React.PureComponent {
   state = {
     members: [],
-    currentMember: {},
     isModal: false,
     component: '',
     typeForm: '',
-    currentTask: {},
-    currentTrack: {},
+    pagePayload: {},
     isLoading: false,
   };
   async componentDidMount() {
@@ -31,61 +30,37 @@ class DimsApp extends React.PureComponent {
       await db.initAppFirebase();
       const members = await db.getMembers();
       this.setState({ members });
-    } catch (e) {
-      throw e;
-    }
+    } catch (e) {}
   }
-  handleMember = (member) => () => {
-    this.setState({ currentMember: member });
+  handleMember = (currentMember) => () => {
+    this.setState({ currentMember });
   };
-  handleTaskPage = (component, typeForm, task) => () => {
-    this.setState((prevState) => {
-      return {
-        component,
-        currentTask: task,
-        typeForm,
-        isModal: !prevState.isModal,
-      };
-    });
-  };
-  handleTrackPage = (component, typeForm, track) => () => {
-    this.setState((prevState) => {
-      return {
-        component,
-        typeForm,
-        currentTrack: track,
-        isModal: !prevState.isModal,
-      };
-    });
-  };
-  handleRegisterPage = (component, typeForm, member) => () => {
-    this.setState((prevState) => {
-      return {
-        component,
-        typeForm,
-        currentMember: member,
-        isModal: !prevState.isModal,
-      };
-    });
+  handlePage = (component, typeForm, pagePayload) => () => {
+    this.setState(
+      (prevState) => {
+        return {
+          ...prevState,
+          component,
+          typeForm,
+          pagePayload,
+        };
+      },
+      () => this.toggleModal(),
+    );
   };
   toggleModal = () => {
     this.setState({ isModal: !this.state.isModal });
   };
 
   render() {
-    const { isModal, members, currentMember, component, typeForm, currentTask, currentTrack } = this.state;
+    const { isModal, members, component: Component, typeForm, pagePayload } = this.state;
     return (
       <div>
         <Header />
         {isModal && (
-          <ModalWindow
-            toggleModal={this.toggleModal}
-            member={currentMember}
-            Component={component}
-            typeForm={typeForm}
-            task={currentTask}
-            track={currentTrack}
-          />
+          <ModalWindow toggleModal={this.toggleModal}>
+            <Component toggleModal={this.toggleModal} typeForm={typeForm} pagePayload={pagePayload} />
+          </ModalWindow>
         )}
         {members.length ? (
           <div className='container'>
@@ -95,25 +70,21 @@ class DimsApp extends React.PureComponent {
                 path='/members'
                 exact
                 render={() => (
-                  <Members
-                    members={members}
-                    handleMember={this.handleMember}
-                    handleRegisterPage={this.handleRegisterPage}
-                  />
+                  <Members members={members} handleMember={this.handleMember} handlePage={this.handlePage} />
                 )}
               />
               <Route
                 path='/members/:id/progress'
                 exact
-                render={(props) => <MemberProgress {...props} handleTaskPage={this.handleTaskPage} />}
+                render={(props) => <MemberProgress {...props} handlePage={this.handlePage} />}
               />
-              <Route path='/members/:id/tasks' exact render={(props) => <MemberTasks {...props} />} />
+              <Route path='/members/:id/tasks' exact component={MemberTasks} />
               <Route
                 path='/members/:id/tasks/:taskId/tracks'
                 exact
-                render={(props) => <TaskTracksManage {...props} handleTrackPage={this.handleTrackPage} />}
+                render={(props) => <TaskTracksManage {...props} handlePage={this.handlePage} />}
               />
-              <Route path='/tasks' render={() => <TasksManage handleTaskPage={this.handleTaskPage} />} />
+              <Route path='/tasks' render={() => <TasksManage handlePage={this.handlePage} />} />
             </Switch>
           </div>
         ) : (

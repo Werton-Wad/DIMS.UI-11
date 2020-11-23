@@ -29,16 +29,12 @@ function firestoreCollection(collection) {
 async function addMemberToCollection(member, collection) {
   try {
     await firestoreCollection(collection).add(member);
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 }
 async function initAppFirebase() {
   try {
     await firebase.initializeApp(firebaseConfig);
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 }
 async function getMembers() {
   try {
@@ -51,18 +47,20 @@ async function getMembers() {
       members.map(async (member) => {
         const { tasks, progress, ...other } = member;
         await addMemberToCollection(other, 'members');
-        progress.map(async (item) => {
-          await addMemberToCollection(item, 'progress');
-        });
-        tasks.map(async (task) => {
-          await addMemberToCollection(task, 'tasks');
-        });
+        await Promise.all(
+          progress.map((item) => {
+            addMemberToCollection(item, 'progress');
+          }),
+        ).catch((e) => {});
+        await Promise.all(
+          tasks.map((task) => {
+            addMemberToCollection(task, 'tasks');
+          }),
+        ).catch((e) => {});
       });
       return members;
     }
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 }
 
 async function getMember(memberId) {
@@ -71,9 +69,7 @@ async function getMember(memberId) {
       .where('id', '==', memberId)
       .get();
     return result.docs.map((doc) => doc.data())[0];
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 }
 async function getMemberTasks(memberId) {
   try {
@@ -82,9 +78,7 @@ async function getMemberTasks(memberId) {
       .get();
     const tasks = result.docs.map((doc) => doc.data());
     return tasks;
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 }
 async function getTaskById(taskId) {
   try {
@@ -93,17 +87,13 @@ async function getTaskById(taskId) {
       .get();
     const task = result.docs.map((doc) => doc.data())[0];
     return task;
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 }
 async function getAllTasks() {
   try {
     const result = await firestoreCollection('tasks').get();
     return result.docs.map((doc) => doc.data());
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 }
 async function getMemberProgress(memberId) {
   try {
@@ -111,9 +101,7 @@ async function getMemberProgress(memberId) {
       .where('userId', '==', memberId)
       .get();
     return result.docs.map((doc) => doc.data());
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 }
 async function getTaskTracks(taskId) {
   try {
@@ -121,9 +109,7 @@ async function getTaskTracks(taskId) {
       .where('taskId', '==', taskId)
       .get();
     return result.docs.map((doc) => doc.data());
-  } catch (e) {
-    throw e;
-  }
+  } catch (e) {}
 }
 async function signInWithGoogle() {
   const authFirebase = firebase.auth();

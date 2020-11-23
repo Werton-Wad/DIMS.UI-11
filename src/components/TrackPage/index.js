@@ -13,7 +13,7 @@ class TrackPage extends React.Component {
   };
   componentDidMount() {
     if (this.props.typeForm !== 'create') {
-      const { note, task, date } = this.props.track;
+      const { note, task, date } = this.props.pagePayload;
       this.setState(() => {
         return {
           task,
@@ -75,7 +75,7 @@ class TrackPage extends React.Component {
 TrackPage.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   typeForm: PropTypes.string.isRequired,
-  track: PropTypes.object,
+  // track: PropTypes.object,
 };
 
 export default TrackPage;

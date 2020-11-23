@@ -2,6 +2,4 @@
 
 .register-page {
   @include modal-form('register');
-  padding: 1rem;
-  width: 20rem;
 }

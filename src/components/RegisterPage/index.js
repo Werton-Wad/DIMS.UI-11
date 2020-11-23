@@ -37,7 +37,7 @@ class RegisterPage extends React.Component {
         mobilePhone,
         skype,
         startDate,
-      } = this.props.member;
+      } = this.props.pagePayload;
       this.setState(() => {
         return {
           name: firstName,

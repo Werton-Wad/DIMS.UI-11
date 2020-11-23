@@ -1,17 +1,23 @@
 @import '../mixins';
+@import '../variables';
 
 .btn {
-  @include button(#17a2bb, #0132cb);
+  @include button($btn-color, $btn-color-hover, $btn-bg-color, $btn-bg-color-hover);
 }
 .btn-fail,
 .btn-warning {
-  @include button(#c60000, red);
+  @include button($btn-color, $btn-color-hover, $btn-warning-bg-color, $btn-warning-bg-color-hover);
 }
 .btn-success {
-  @include button(#126a14, #244d20);
+  @include button($btn-color, $btn-color-hover, $btn-success-bg-color, $btn-success-bg-color-hover);
 }
 .btn-form-save {
-  @include form-button(#000, #009900, #fff, #009900);
+  @include form-button(
+    $btn-form-save-color,
+    $btn-form-save-bg-color,
+    $btn-form-save-color-hover,
+    $btn-form-save-bg-color-hover
+  );
   margin-right: 3rem;
 }
 .btn-register,
@@ -21,5 +27,10 @@
   margin-bottom: 1.5rem;
 }
 .btn-form-back {
-  @include form-button(#000, #fff, #fff, #000);
+  @include form-button(
+    $btn-form-back-color,
+    $btn-form-back-bg-color,
+    $btn-form-back-color-hover,
+    $btn-form-back-bg-color-hover
+  );
 }

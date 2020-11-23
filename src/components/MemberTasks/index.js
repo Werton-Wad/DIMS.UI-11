@@ -5,18 +5,21 @@ import Button from '../Button';
 import Spinner from '../Spinner';
 import { db } from '../../firebase';
 import { convertDate } from '../utilis';
-class MemberTasks extends React.Component {
+class MemberTasks extends React.PureComponent {
   state = {
     member: {},
     isLoading: true,
     firstName: '',
     tasks: [],
   };
-  async componentDidMount() {
-    const memberId = this.props.match.params.id;
-    const member = await db.getMember(memberId);
-    const tasks = await db.getMemberTasks(memberId);
-    this.setState({ firstName: member.firstName, lastName: member.lastName, tasks, isLoading: false, member });
+  componentDidMount() {
+    const { id: memberId } = this.props.match.params;
+    Promise.all([db.getMember(memberId), db.getMemberTasks(memberId)])
+      .then(([member, tasks]) => {
+        const { firstName, lastName } = member;
+        this.setState({ firstName, lastName, tasks, isLoading: false, member });
+      })
+      .catch((e) => {});
   }
   render() {
     const { firstName, tasks, isLoading, member } = this.state;
@@ -40,13 +43,14 @@ class MemberTasks extends React.Component {
           </thead>
           <tbody>
             {tasks.map((task, i) => {
+              const { id, name, startDate, deadlineDate, status } = task;
               return (
-                <tr key={task.id}>
+                <tr key={id}>
                   <td>{++i}</td>
-                  <td>{task.name}</td>
-                  <td>{convertDate(task.startDate)}</td>
-                  <td>{convertDate(task.deadlineDate)}</td>
-                  <td>{task.status}</td>
+                  <td>{name}</td>
+                  <td>{convertDate(startDate)}</td>
+                  <td>{convertDate(deadlineDate)}</td>
+                  <td>{status}</td>
                   <td>
                     <Link to={`/members/${member.id}/tasks/${task.id}/tracks`}>
                       <Button buttonClass='btn' buttonName='Track' />

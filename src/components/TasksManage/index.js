@@ -23,7 +23,7 @@ class TasksManage extends React.Component {
         <Button
           buttonName='Create'
           buttonClass='btn btn-create'
-          handleClick={this.props.handleTaskPage(TaskPage, 'create')}
+          handleClick={this.props.handlePage(TaskPage, 'create')}
         />
         <table className='table-members'>
           <thead>
@@ -40,7 +40,7 @@ class TasksManage extends React.Component {
               return (
                 <tr key={task.id}>
                   <td>{++i}</td>
-                  <td onClick={this.props.handleTaskPage(TaskPage, 'detail', task)}>{task.name}</td>
+                  <td onClick={this.props.handlePage(TaskPage, 'detail', task)}>{task.name}</td>
                   <td>{convertDate(task.startDate)} </td>
                   <td>{convertDate(task.deadlineDate)} </td>
                   <td>
@@ -48,7 +48,7 @@ class TasksManage extends React.Component {
                       <Button
                         buttonClass='btn'
                         buttonName='Edit'
-                        handleClick={this.props.handleTaskPage(TaskPage, 'edit', task)}
+                        handleClick={this.props.handlePage(TaskPage, 'edit', task)}
                       />
                       <Button buttonClass='btn-warning' buttonName='Delete' />
                     </div>
@@ -66,7 +66,7 @@ class TasksManage extends React.Component {
 }
 
 TasksManage.propTypes = {
-  handleTaskPage: PropTypes.func.isRequired,
+  handlePage: PropTypes.func.isRequired,
 };
 
 export default TasksManage;

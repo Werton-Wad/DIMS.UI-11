@@ -7,14 +7,10 @@ import { convertDate, getAge } from '../utilis';
 import { getFullName } from '../helpers';
 import RegisterPage from '../RegisterPage';
 
-const Members = ({ members, handleMember, handleRegisterPage }) => {
+const Members = ({ members, handleMember, handlePage }) => {
   return (
     <section className='members'>
-      <Button
-        buttonName='Register'
-        buttonClass='btn btn-register'
-        handleClick={handleRegisterPage(RegisterPage, 'create')}
-      />
+      <Button buttonName='Register' buttonClass='btn btn-register' handleClick={handlePage(RegisterPage, 'create')} />
       <table className='table-members'>
         <thead>
           <tr>
@@ -32,7 +28,7 @@ const Members = ({ members, handleMember, handleRegisterPage }) => {
             return (
               <tr key={member.id}>
                 <td>{++i}</td>
-                <td onClick={handleRegisterPage(RegisterPage, 'detail', member)}>
+                <td onClick={handlePage(RegisterPage, 'detail', member)}>
                   {getFullName(member.firstName, member.lastName)}
                 </td>
                 <td>{member.direction}</td>
@@ -52,7 +48,7 @@ const Members = ({ members, handleMember, handleRegisterPage }) => {
                     <Button
                       buttonClass='btn'
                       buttonName='Edit'
-                      handleClick={handleRegisterPage(RegisterPage, 'edit', member)}
+                      handleClick={handlePage(RegisterPage, 'edit', member)}
                     />
                     <Button buttonClass='btn-warning' buttonName='Delete' />
                   </div>
@@ -69,7 +65,7 @@ const Members = ({ members, handleMember, handleRegisterPage }) => {
 Members.propTypes = {
   members: PropTypes.array.isRequired,
   handleMember: PropTypes.func.isRequired,
-  handleRegisterPage: PropTypes.func.isRequired,
+  // handleRegisterPage: PropTypes.func.isRequired,
 };
 
 export default Members;

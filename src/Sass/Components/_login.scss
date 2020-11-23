@@ -1,3 +1,5 @@
+@import '../mixins';
+
 .login-wrapper {
   width: 100vw;
   height: 100vh;
@@ -18,8 +20,7 @@
     form {
       display: flex;
       justify-content: space-between;
-      input,
-      button {
+      input {
         display: block;
         flex-basis: 100%;
         margin: 0 1rem;
@@ -37,16 +38,16 @@
         }
       }
       button {
+        @include button(#000, #fff, #fff, #19646a);
+        display: block;
+        flex-basis: 100%;
+        margin: 0 1rem;
+        margin-bottom: 3rem;
+        border-radius: 1.5rem;
+        padding: 1rem 0.5rem;
+        border: 0;
+        border-radius: 1.5rem;
         text-transform: uppercase;
-        cursor: pointer;
-        &:hover {
-          background-color: #19646a;
-          color: #fff;
-          -webkit-transition: all 0.3s ease;
-          -moz-transition: all 0.3s ease;
-          -o-transition: all 0.3s ease;
-          transition: all 0.3s ease;
-        }
       }
     }
     .buttons-container {
@@ -55,9 +56,8 @@
       display: flex;
       justify-content: space-between;
       button {
+        @include button(#000, #fff, #fff, #19646a);
         width: 50%;
-        cursor: pointer;
-        color: #03aea6;
         text-transform: uppercase;
         margin: 0 1rem;
         margin-bottom: 3rem;
@@ -65,18 +65,8 @@
         border: 0;
         border-bottom: 1px solid #b4babe;
         outline: 0;
-        color: #000;
         font-weight: bold;
-        background: #fff;
         padding: 1rem 0.5rem;
-        &:hover {
-          background-color: #19646a;
-          color: #fff;
-          -webkit-transition: all 0.3s ease;
-          -moz-transition: all 0.3s ease;
-          -o-transition: all 0.3s ease;
-          transition: all 0.3s ease;
-        }
       }
     }
   }

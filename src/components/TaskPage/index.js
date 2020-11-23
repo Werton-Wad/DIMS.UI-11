@@ -7,7 +7,7 @@ import { convertDate } from '../utilis';
 import { db } from '../../firebase';
 import helperTaskPage from './helperTaskPage';
 
-class TaskPage extends React.Component {
+class TaskPage extends React.PureComponent {
   state = {
     isLoading: true,
     members: [],
@@ -22,9 +22,9 @@ class TaskPage extends React.Component {
     try {
       const members = await db.getMembers();
       if (this.props.typeForm !== 'create') {
-        let gettedTask = this.props.task;
+        let gettedTask = this.props.pagePayload;
         if (typeof gettedTask === 'string') {
-          const taskId = this.props.task;
+          const taskId = this.props.pagePayload;
           gettedTask = await db.getTaskById(taskId);
         }
         const { description, startDate, deadlineDate, id, userId, name } = gettedTask;
@@ -42,9 +42,7 @@ class TaskPage extends React.Component {
       } else {
         this.setState({ members, isLoading: false });
       }
-    } catch (e) {
-      throw e;
-    }
+    } catch (e) {}
   }
   handleChange = (e) => {
     const { name, value } = e.target;

@@ -1,7 +1,7 @@
 import React from 'react';
 import auth from '../Auth/auth';
 
-class Login extends React.Component {
+class Login extends React.PureComponent {
   state = {
     email: '',
     password: '',

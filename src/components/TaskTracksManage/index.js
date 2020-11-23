@@ -24,7 +24,7 @@ class TaskTrackManage extends React.Component {
         <Button
           buttonName='Add track'
           buttonClass='btn btn-add-track'
-          handleClick={this.props.handleTrackPage(TrackPage, 'create')}
+          handleClick={this.props.handlePage(TrackPage, 'create')}
         />
         <Link to={`/members/${this.props.match.params.id}/tasks`}>
           <Button buttonName='To Tasks' buttonClass='btn btn-back' />
@@ -45,7 +45,7 @@ class TaskTrackManage extends React.Component {
                 <tr key={item.noteId}>
                   <td>{++i}</td>
                   <td>{item.task}</td>
-                  <td className='row-note' onClick={this.props.handleTrackPage(TrackPage, 'detail', item)}>
+                  <td className='row-note' onClick={this.props.handlePage(TrackPage, 'detail', item)}>
                     {item.note}
                   </td>
                   <td>{convertDate(item.date)}</td>
@@ -54,7 +54,7 @@ class TaskTrackManage extends React.Component {
                       <Button
                         buttonClass='btn'
                         buttonName='Edit'
-                        handleClick={this.props.handleTrackPage(TrackPage, 'edit', item)}
+                        handleClick={this.props.handlePage(TrackPage, 'edit', item)}
                       />
                       <Button buttonClass='btn-warning' buttonName='Delete' />
                     </div>

@@ -9,22 +9,25 @@ import { db } from '../../firebase';
 import Spinner from '../Spinner';
 import TaskPage from '../TaskPage';
 
-class MemberProgress extends React.Component {
+class MemberProgress extends React.PureComponent {
   state = {
     progress: [],
     isLoading: true,
     firstName: '',
     lastName: '',
   };
-  async componentDidMount() {
-    const memberId = this.props.match.params.id;
-    const progress = await db.getMemberProgress(memberId);
-    const member = await db.getMember(memberId);
-    this.setState({ firstName: member.firstName, lastName: member.lastName, progress, isLoading: false });
+  componentDidMount() {
+    const { id: memberId } = this.props.match.params;
+    Promise.all([db.getMemberProgress(memberId), db.getMember(memberId)])
+      .then(([progress, member]) => {
+        const { firstName, lastName } = member;
+        this.setState({ firstName, lastName, progress, isLoading: false });
+      })
+      .catch((e) => {});
   }
   render() {
     const { isLoading, firstName, lastName, progress } = this.state;
-    const { handleTaskPage } = this.props;
+    const { handlePage } = this.props;
     return !isLoading ? (
       <div>
         <div className='task-message'>{getFullName(firstName, lastName)} progress:</div>
@@ -45,7 +48,7 @@ class MemberProgress extends React.Component {
               return (
                 <tr key={item.taskId}>
                   <td>{++i}</td>
-                  <td onClick={handleTaskPage(TaskPage, 'detail', item.taskId)}>{item.task}</td>
+                  <td onClick={handlePage(TaskPage, 'detail', item.taskId)}>{item.task}</td>
                   <td>{item.note}</td>
                   <td>{convertDate(item.date)}</td>
                 </tr>
@@ -61,7 +64,7 @@ class MemberProgress extends React.Component {
 }
 
 MemberProgress.propTypes = {
-  handleTaskPage: PropTypes.func.isRequired,
+  handlePage: PropTypes.func.isRequired,
 };
 
 export default MemberProgress;

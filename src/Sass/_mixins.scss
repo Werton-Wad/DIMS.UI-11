@@ -1,4 +1,4 @@
-@mixin button($bg-color, $bg-color-hover) {
+@mixin button($color, $color-hover, $bg-color, $bg-color-hover) {
   cursor: pointer;
   font-size: 15px;
   margin: 0.35rem;
@@ -8,14 +8,11 @@
   border: 0;
   border-radius: 5px;
   font-weight: bold;
-  color: #000;
+  color: $color;
 
   &:hover {
     background-color: $bg-color-hover;
-    color: white;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
+    color: $color-hover;
     transition: all 0.3s ease;
   }
 }
@@ -36,13 +33,11 @@
   &:hover {
     background-color: $bg-color-hover;
     color: $color-hover;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    -o-transition: all 0.3s ease;
     transition: all 0.3s ease;
   }
 }
 @mixin modal-form($child) {
+  padding: 1rem;
   .#{$child} {
     h3 {
       font-size: 23px;
