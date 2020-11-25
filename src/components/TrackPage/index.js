@@ -1,22 +1,21 @@
 import React from 'react';
+import faker from 'faker';
 import PropTypes from 'prop-types';
 
 import Button from '../Button';
-import { convertDate } from '../utilis';
+import { convertDate, getTimestampFromString } from '../utilis';
 import helperTrackPage from './helperTrackPage';
 
-class TrackPage extends React.Component {
+class TrackPage extends React.PureComponent {
   state = {
-    task: '',
     date: '',
     note: '',
   };
   componentDidMount() {
     if (this.props.typeForm !== 'create') {
-      const { note, task, date } = this.props.track;
+      const { note, date } = this.props.pagePayload;
       this.setState(() => {
         return {
-          task,
           note,
           date: convertDate(date, true),
         };
@@ -30,13 +29,38 @@ class TrackPage extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    /* logic */
+    const { date, note } = this.state;
+    const { typeForm } = this.props;
+    console.log(this.props.pagePayload);
+    let obj = {};
+    if (this.props.typeForm === 'create') {
+      const { id: taskId, userId, name: task } = this.props.pagePayload;
+      obj = {
+        task,
+        note,
+        date: getTimestampFromString(date),
+        taskId,
+        userId,
+        id: faker.random.uuid(),
+      };
+    } else if (this.props.typeForm === 'edit') {
+      const { id, taskId, userId, task } = this.props.pagePayload;
+      obj = {
+        id,
+        task,
+        note,
+        date: getTimestampFromString(date),
+        taskId,
+        userId,
+      };
+    }
+    this.props.createTrack(obj, typeForm);
     this.props.toggleModal();
   };
   render() {
-    console.log(this.props);
     const { typeForm } = this.props;
-    const { date, note, task } = this.state;
+    const { date, note } = this.state;
+    const { name: task } = this.props.pagePayload;
     return (
       <div className='track-page'>
         <div className='track'>
@@ -75,7 +99,7 @@ class TrackPage extends React.Component {
 TrackPage.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   typeForm: PropTypes.string.isRequired,
-  track: PropTypes.object,
+  pagePayload: PropTypes.object.isRequired,
 };
 
 export default TrackPage;

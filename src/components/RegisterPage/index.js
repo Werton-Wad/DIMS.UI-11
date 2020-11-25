@@ -1,14 +1,16 @@
 import React from 'react';
+import faker from 'faker';
 import PropTypes from 'prop-types';
 
 import Button from '../Button';
 import { getFullName } from '../helpers';
-import { convertDate } from '../utilis';
+import { convertDate, getTimestampFromString } from '../utilis';
 import helperRegisterPage from './helperRegisterPage';
+import { db } from '../../firebase';
 
-class RegisterPage extends React.Component {
+class RegisterPage extends React.PureComponent {
   state = {
-    name: '',
+    firstName: '',
     lastName: '',
     direction: '',
     email: '',
@@ -21,10 +23,14 @@ class RegisterPage extends React.Component {
     mobilePhone: null,
     skype: '',
     startDate: '',
+    directions: [],
+    isLoading: true,
   };
-  componentDidMount() {
+  async componentDidMount() {
+    const directions = await db.getDirections();
     if (this.props.typeForm !== 'create') {
       const {
+        id,
         firstName,
         lastName,
         direction,
@@ -38,24 +44,29 @@ class RegisterPage extends React.Component {
         mobilePhone,
         skype,
         startDate,
-      } = this.props.member;
+      } = this.props.pagePayload;
       this.setState(() => {
         return {
-          name: firstName,
+          id,
+          firstName,
           lastName,
           direction,
           education,
           email,
           sex,
           mathScore,
-          birthDate: convertDate(startDate, true),
+          birthDate: convertDate(birthDate, true),
           universityAverageScore,
           address,
           mobilePhone,
           skype,
           startDate: convertDate(startDate, true),
+          directions,
+          isLoading: false,
         };
       });
+    } else {
+      this.setState({ directions, isLoading: false });
     }
   }
   handleChange = (e) => {
@@ -65,13 +76,30 @@ class RegisterPage extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    /* logic */
+    const { directions, isLoading, startDate, birthDate, ...member } = this.state;
+    const { typeForm } = this.props;
+    let obj = {};
+    if (this.props.typeForm === 'create') {
+      obj = {
+        ...member,
+        startDate: getTimestampFromString(startDate),
+        birthDate: getTimestampFromString(birthDate),
+        id: faker.random.uuid(),
+      };
+    } else if (this.props.typeForm === 'edit') {
+      obj = {
+        ...member,
+        startDate: getTimestampFromString(startDate),
+        birthDate: getTimestampFromString(birthDate),
+      };
+    }
+    this.props.registerMember(obj, typeForm);
     this.props.toggleModal();
   };
   render() {
     const { typeForm, toggleModal } = this.props;
     const {
-      name,
+      firstName,
       lastName,
       direction,
       email,
@@ -84,22 +112,28 @@ class RegisterPage extends React.Component {
       mobilePhone,
       skype,
       startDate,
+      directions,
+      isLoading,
     } = this.state;
-    return (
+    return !isLoading ? (
       <div className='register-page'>
         <div className='register'>
           <h3 className='register-page__title'>
-            {helperRegisterPage[typeForm].title(typeForm !== 'create' ? getFullName(name, lastName) : null)}
+            {helperRegisterPage[typeForm].title(
+              typeForm !== 'create'
+                ? getFullName(this.props.pagePayload.firstName, this.props.pagePayload.lastName)
+                : null,
+            )}
           </h3>
           <form autoComplete='off'>
             <div className='form-elems'>
               <div>
                 <label for='register-name'>Name</label>
                 <input
-                  name='name'
+                  name='firstName'
                   id='register-name'
                   type='text'
-                  value={name}
+                  value={firstName}
                   onChange={this.handleChange}
                   disabled={typeForm === 'detail'}
                   required
@@ -147,11 +181,11 @@ class RegisterPage extends React.Component {
                   required
                 />
                 <label for='register-direction'>Direction</label>
-                <select id='register-direction' name='direction' required disabled={typeForm === 'detail'}>
-                  <option selected={'java' === direction}>java</option>
-                  <option selected={'.net' === direction}>.net</option>
-                  <option selected={'frontend' === direction}>frontend</option>
-                  <option selected={'php' === direction}>php</option>
+                <select id='register-direction' onChange={this.handleChange} name='direction' required>
+                  {directions.map((item) => {
+                    const { id, direction: name } = item;
+                    return <option key={id}>{name}</option>;
+                  })}
                 </select>
                 <label for='register-university-score'>University average score</label>
                 <input
@@ -209,11 +243,11 @@ class RegisterPage extends React.Component {
                   <label>Sex</label>
                   <label className='label-sex' for='male'>
                     <span className='title-radio-input'>Male</span>
-                    <input type='radio' name='sex' id='male' checked={'male' === sex} />
+                    <input type='radio' name='sex' onChange={this.handleChange} value='mail' id='male' />
                   </label>
                   <label className='label-sex' for='female'>
                     <span className='title-radio-input'>Female</span>
-                    <input type='radio' name='sex' id='female' checked={'female' === sex} />
+                    <input type='radio' name='sex' onChange={this.handleChange} value='female' id='female' />
                   </label>
                 </div>
               </div>
@@ -237,11 +271,14 @@ class RegisterPage extends React.Component {
           </form>
         </div>
       </div>
+    ) : (
+      ''
     );
   }
 }
 RegisterPage.propTypes = {
   toggleModal: PropTypes.func.isRequired,
   typeForm: PropTypes.string.isRequired,
+  pagePayload: PropTypes.object,
 };
 export default RegisterPage;

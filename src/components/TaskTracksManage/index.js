@@ -7,24 +7,28 @@ import { db } from '../../firebase';
 import { convertDate } from '../utilis';
 import TrackPage from '../TrackPage';
 
-class TaskTrackManage extends React.Component {
+class TaskTrackManage extends React.PureComponent {
   state = {
-    tracks: [],
     isLoading: true,
+    task: {},
   };
   async componentDidMount() {
     const taskId = this.props.match.params.taskId;
-    const tracks = await db.getTaskTracks(taskId);
-    this.setState({ tracks, isLoading: false });
+    const task = await db.getTaskById(taskId);
+    this.setState({ task, isLoading: false });
+  }
+  componentWillUnmount() {
+    this.props.setIsLoading();
   }
   render() {
-    return !this.state.isLoading ? (
+    const { tracks } = this.props;
+    return true ? (
       <div>
         <div className='task-message'> This is your task tracks:</div>
         <Button
           buttonName='Add track'
           buttonClass='btn btn-add-track'
-          handleClick={this.props.handleTrackPage(TrackPage, 'create')}
+          handleClick={this.props.handlePage(TrackPage, 'create', this.state.task)}
         />
         <Link to={`/members/${this.props.match.params.id}/tasks`}>
           <Button buttonName='To Tasks' buttonClass='btn btn-back' />
@@ -40,12 +44,12 @@ class TaskTrackManage extends React.Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.tracks.map((item, i) => {
+            {tracks.map((item, i) => {
               return (
-                <tr key={item.noteId}>
+                <tr key={item.id}>
                   <td>{++i}</td>
                   <td>{item.task}</td>
-                  <td className='row-note' onClick={this.props.handleTrackPage(TrackPage, 'detail', item)}>
+                  <td className='row-note' onClick={this.props.handlePage(TrackPage, 'detail', item)}>
                     {item.note}
                   </td>
                   <td>{convertDate(item.date)}</td>
@@ -54,9 +58,13 @@ class TaskTrackManage extends React.Component {
                       <Button
                         buttonClass='btn'
                         buttonName='Edit'
-                        handleClick={this.props.handleTrackPage(TrackPage, 'edit', item)}
+                        handleClick={this.props.handlePage(TrackPage, 'edit', item)}
                       />
-                      <Button buttonClass='btn-warning' buttonName='Delete' />
+                      <Button
+                        buttonClass='btn-warning'
+                        buttonName='Delete'
+                        handleClick={() => this.props.deleteTrack(item.id, 'progress')}
+                      />
                     </div>
                   </td>
                 </tr>

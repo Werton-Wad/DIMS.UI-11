@@ -1,6 +1,6 @@
 import firebase from 'firebase';
 
-import { createData } from './components/utilis';
+import { createData, createDirections } from './components/utilis';
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_APIKEY,
@@ -22,6 +22,30 @@ async function addMemberToCollection(member, collection) {
   } catch (e) {
     throw e;
   }
+}
+async function deleteMemberFromCollection(memberId, collection) {
+  const doc = await firestoreCollection(collection)
+    .where('id', '==', memberId)
+    .get();
+  doc.forEach((el) => {
+    el.ref.delete();
+  });
+}
+async function updateMember(memberId, collection, obj) {
+  const doc = await firestoreCollection(collection)
+    .where('id', '==', memberId)
+    .get();
+  doc.forEach((el) => {
+    el.ref.update(obj);
+  });
+}
+async function updateStatus(taskId, status) {
+  const doc = await firestoreCollection('tasks')
+    .where('id', '==', taskId)
+    .get();
+  doc.forEach((el) => {
+    el.ref.update({ status: status });
+  });
 }
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 
@@ -53,6 +77,12 @@ async function getMembers() {
           await addMemberToCollection(task, 'tasks');
         });
       });
+      const directions = createDirections();
+      await Promise.all(
+        directions.map((direction) => {
+          addMemberToCollection(direction, 'directions');
+        }),
+      );
       return members;
     }
   } catch (e) {
@@ -100,6 +130,14 @@ async function getAllTasks() {
     throw e;
   }
 }
+async function getDirections() {
+  try {
+    const result = await firestoreCollection('directions').get();
+    return result.docs.map((doc) => doc.data());
+  } catch (e) {
+    throw e;
+  }
+}
 async function getMemberProgress(memberId) {
   try {
     const result = await firestoreCollection('progress')
@@ -129,6 +167,11 @@ export const db = {
   getAllTasks: getAllTasks,
   getTaskById: getTaskById,
   getTaskTracks: getTaskTracks,
+  getDirections: getDirections,
+  addMemberToCollection: addMemberToCollection,
+  deleteMemberFromCollection: deleteMemberFromCollection,
+  updateMember: updateMember,
+  updateStatus: updateStatus,
   firebaseApp: firebaseApp,
   firebaseConfig: firebaseConfig,
 };

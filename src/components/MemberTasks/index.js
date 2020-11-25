@@ -5,23 +5,34 @@ import Button from '../Button';
 import Spinner from '../Spinner';
 import { db } from '../../firebase';
 import { convertDate } from '../utilis';
-class MemberTasks extends React.Component {
+class MemberTasks extends React.PureComponent {
   state = {
     member: {},
     isLoading: true,
     firstName: '',
     tasks: [],
   };
-  async componentDidMount() {
-    const memberId = this.props.match.params.id;
-    const member = await db.getMember(memberId);
-    const tasks = await db.getMemberTasks(memberId);
-    this.setState({ firstName: member.firstName, lastName: member.lastName, tasks, isLoading: false, member });
+  statusRef = [];
+  componentDidMount() {
+    const { id: memberId } = this.props.match.params;
+    Promise.all([db.getMember(memberId), db.getMemberTasks(memberId)])
+      .then(([member, tasks]) => {
+        const { firstName, lastName } = member;
+        this.setState({ firstName, lastName, tasks, isLoading: false, member });
+      })
+      .catch((e) => {});
   }
+  handleStatus = (id, changedStatus) => {
+    db.updateStatus(id, changedStatus)
+      .then(() => {
+        this.statusRef[id].textContent = changedStatus;
+      })
+      .catch();
+  };
   render() {
     const { firstName, tasks, isLoading, member } = this.state;
     return !isLoading ? (
-      <div>
+      <div className='members'>
         <div className='task-message'>Hi, dear {firstName}! This is your current tasks:</div>
         <Link to='/members'>
           <Button buttonName='Back' buttonClass='btn btn-back' />
@@ -40,22 +51,31 @@ class MemberTasks extends React.Component {
           </thead>
           <tbody>
             {tasks.map((task, i) => {
+              const { id, name, startDate, deadlineDate, status } = task;
               return (
-                <tr key={task.id}>
+                <tr key={id}>
                   <td>{++i}</td>
-                  <td>{task.name}</td>
-                  <td>{convertDate(task.startDate)}</td>
-                  <td>{convertDate(task.deadlineDate)}</td>
-                  <td>{task.status}</td>
+                  <td>{name}</td>
+                  <td>{convertDate(startDate)}</td>
+                  <td>{convertDate(deadlineDate)}</td>
+                  <td ref={(ref) => (this.statusRef[id] = ref)}>{status}</td>
                   <td>
                     <Link to={`/members/${member.id}/tasks/${task.id}/tracks`}>
-                      <Button buttonClass='btn' buttonName='Track' />
+                      <Button buttonClass='btn' buttonName='Track' handleClick={() => this.props.handleTrack(id)} />
                     </Link>
                   </td>
                   <td>
                     <div className='buttons'>
-                      <Button buttonClass='btn-success' buttonName='Success' />
-                      <Button buttonClass='btn-fail' buttonName='Fail' />
+                      <Button
+                        buttonClass='btn-success'
+                        buttonName='Success'
+                        handleClick={() => this.handleStatus(id, 'Success')}
+                      />
+                      <Button
+                        buttonClass='btn-fail'
+                        buttonName='Fail'
+                        handleClick={() => this.handleStatus(id, 'Fail')}
+                      />
                     </div>
                   </td>
                 </tr>

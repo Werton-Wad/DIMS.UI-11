@@ -1,35 +1,37 @@
 import React from 'react';
+import faker from 'faker';
 import PropTypes from 'prop-types';
 
 import Button from '../Button';
 import { getFullName } from '../helpers';
-import { convertDate } from '../utilis';
+import { convertDate, getTimestampFromString } from '../utilis';
 import { db } from '../../firebase';
 import helperTaskPage from './helperTaskPage';
 
-class TaskPage extends React.Component {
+class TaskPage extends React.PureComponent {
   state = {
     isLoading: true,
     members: [],
+    id: '',
     name: '',
     description: '',
     start: '',
     deadline: '',
     selected: '',
   };
-
   async componentDidMount() {
     try {
       const members = await db.getMembers();
       if (this.props.typeForm !== 'create') {
-        let gettedTask = this.props.task;
+        let gettedTask = this.props.pagePayload;
         if (typeof gettedTask === 'string') {
-          const taskId = this.props.task;
+          const taskId = this.props.pagePayload;
           gettedTask = await db.getTaskById(taskId);
         }
         const { description, startDate, deadlineDate, id, userId, name } = gettedTask;
         this.setState(() => {
           return {
+            id,
             members,
             name,
             description,
@@ -52,13 +54,49 @@ class TaskPage extends React.Component {
   };
 
   handleSubmit = (e) => {
+    // try {
+    //   e.preventDefault();
+    //   const { name, description, start, deadline, selected } = this.state;
+    //   const newTask = {
+    //     id: faker.random.uuid(),
+    //     userId: selected,
+    //     name,
+    //     description,
+    //     startDate: getTimestampFromString(start),
+    //     deadlineDate: getTimestampFromString(deadline),
+    //   }
+    //   await db.addMemberToCollection(newTask, 'tasks');
+    //   this.props.toggleModal();
+    // } catch (e) {}
     e.preventDefault();
-    /* logic */
+    const { name, description, start, deadline, id, selected } = this.state;
+    const { typeForm } = this.props;
+    let obj = {};
+    if (this.props.typeForm === 'create') {
+      obj = {
+        name,
+        description,
+        startDate: getTimestampFromString(start),
+        deadlineDate: getTimestampFromString(deadline),
+        status: 'Active',
+        userId: selected,
+        id: faker.random.uuid(),
+      };
+    } else if (this.props.typeForm === 'edit') {
+      obj = {
+        id,
+        name,
+        description,
+        startDate: getTimestampFromString(start),
+        deadlineDate: getTimestampFromString(deadline),
+        userId: selected,
+      };
+    }
+    this.props.createTask(obj, typeForm);
     this.props.toggleModal();
   };
 
   render() {
-    console.log(this.props);
     const { isLoading, members, name, start, description, deadline, selected } = this.state;
     const { typeForm, toggleModal } = this.props;
     return !isLoading ? (
@@ -131,5 +169,6 @@ class TaskPage extends React.Component {
 TaskPage.propTypes = {
   typeForm: PropTypes.string.isRequired,
   toggleModal: PropTypes.func.isRequired,
+  pagePayload: PropTypes.object.isRequired,
 };
 export default TaskPage;

@@ -12,19 +12,23 @@ class TasksManage extends React.Component {
     tasks: [],
     isLoading: true,
   };
-  async componentDidMount() {
-    const tasks = await db.getAllTasks();
-    this.setState({ tasks, isLoading: false });
-  }
+  // async componentDidMount() {
+  //   const tasks = await db.getAllTasks();
+  //   this.setState({ tasks, isLoading: false });
+  // }
+  // deleteTask = async (taskId, collection) => {
+  //   try {
+  //     const tasks = this.state.tasks.filter((task) => task.id !== taskId);
+  //     this.setState({ tasks });
+  //     await db.deleteMemberFromCollection(taskId, collection);
+  //   } catch (e) {}
+  // }
   render() {
-    const { isLoading, tasks } = this.state;
-    return !isLoading ? (
-      <section>
-        <Button
-          buttonName='Create'
-          buttonClass='btn btn-create'
-          handleClick={this.props.handleTaskPage(TaskPage, 'create')}
-        />
+    const { isLoading } = this.state;
+    const { handlePage, deleteTask, tasks } = this.props;
+    return isLoading ? (
+      <section className='members'>
+        <Button buttonName='Create' buttonClass='btn btn-create' handleClick={handlePage(TaskPage, 'create')} />
         <table className='table-members'>
           <thead>
             <tr>
@@ -37,20 +41,21 @@ class TasksManage extends React.Component {
           </thead>
           <tbody>
             {tasks.map((task, i) => {
+              const { id, startDate, deadlineDate } = task;
               return (
-                <tr key={task.id}>
+                <tr key={id}>
                   <td>{++i}</td>
-                  <td onClick={this.props.handleTaskPage(TaskPage, 'detail', task)}>{task.name}</td>
-                  <td>{convertDate(task.startDate)} </td>
-                  <td>{convertDate(task.deadlineDate)} </td>
+                  <td onClick={handlePage(TaskPage, 'detail', task)}>{task.name}</td>
+                  <td>{convertDate(startDate)} </td>
+                  <td>{convertDate(deadlineDate)} </td>
                   <td>
                     <div className='buttons'>
+                      <Button buttonClass='btn' buttonName='Edit' handleClick={handlePage(TaskPage, 'edit', task)} />
                       <Button
-                        buttonClass='btn'
-                        buttonName='Edit'
-                        handleClick={this.props.handleTaskPage(TaskPage, 'edit', task)}
+                        buttonClass='btn-warning'
+                        buttonName='Delete'
+                        handleClick={() => deleteTask(id, 'tasks')}
                       />
-                      <Button buttonClass='btn-warning' buttonName='Delete' />
                     </div>
                   </td>
                 </tr>

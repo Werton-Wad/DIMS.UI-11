@@ -90,7 +90,7 @@ export function generateUser() {
       task: el.name,
       userId: userId,
       taskId: el.id,
-      noteId: faker.random.uuid(),
+      id: faker.random.uuid(),
       note: faker.random.arrayElement([
         'Implemented task state',
         'Created spinner',
@@ -100,4 +100,12 @@ export function generateUser() {
       date: Date.parse(faker.date.between('2020-11-01', '2020-11-30')),
     })),
   };
+}
+export function createDirections() {
+  return ['.net', 'java', 'frontend', 'php'].map((direction) => {
+    return { direction, id: faker.random.uuid() };
+  });
+}
+export function getTimestampFromString(date) {
+  return Date.parse(new Date(date));
 }

@@ -2,8 +2,7 @@
 
 .register-page {
   @include modal-form('register');
-  padding: 1rem;
-  width: 900px;
+  width: auto;
   .form-elems {
     display: flex;
     & > div {

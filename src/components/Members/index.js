@@ -8,7 +8,7 @@ import { getFullName } from '../helpers';
 import RegisterPage from '../RegisterPage';
 import { AuthContext } from '../Auth/AuthProvider';
 
-const Members = ({ members, handleMember, handleRegisterPage }) => {
+const Members = ({ members, handleMember, handlePage, deleteMember }) => {
   return (
     <AuthContext.Consumer>
       {(context) => (
@@ -16,7 +16,7 @@ const Members = ({ members, handleMember, handleRegisterPage }) => {
           <Button
             buttonName='Register'
             buttonClass='btn btn-register'
-            handleClick={handleRegisterPage(RegisterPage, 'create')}
+            handleClick={handlePage(RegisterPage, 'create')}
           />
           <table className='table-members'>
             <thead>
@@ -35,7 +35,7 @@ const Members = ({ members, handleMember, handleRegisterPage }) => {
                 return (
                   <tr key={member.id}>
                     <td>{++i}</td>
-                    <td onClick={handleRegisterPage(RegisterPage, 'detail', member)}>
+                    <td onClick={handlePage(RegisterPage, 'detail', member)}>
                       {getFullName(member.firstName, member.lastName)}
                     </td>
                     <td>{member.direction}</td>
@@ -55,9 +55,13 @@ const Members = ({ members, handleMember, handleRegisterPage }) => {
                         <Button
                           buttonClass='btn'
                           buttonName='Edit'
-                          handleClick={handleRegisterPage(RegisterPage, 'edit', member)}
+                          handleClick={handlePage(RegisterPage, 'edit', member)}
                         />
-                        <Button buttonClass='btn-warning' buttonName='Delete' />
+                        <Button
+                          buttonClass='btn-warning'
+                          buttonName='Delete'
+                          handleClick={() => deleteMember(member.id, 'members')}
+                        />
                       </div>
                     </td>
                   </tr>
@@ -74,7 +78,7 @@ const Members = ({ members, handleMember, handleRegisterPage }) => {
 Members.propTypes = {
   members: PropTypes.array.isRequired,
   handleMember: PropTypes.func.isRequired,
-  handleRegisterPage: PropTypes.func.isRequired,
+  handlePage: PropTypes.func.isRequired,
 };
 
 export default Members;
